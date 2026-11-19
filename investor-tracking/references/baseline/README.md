@@ -8,11 +8,11 @@ This folder holds a three-year baseline (Q4 2023 to Q3 2026) for each of the 13 
 
 Each manager has a folder:
 
-- `holdings/YYYY-QN.csv`, one per quarter. Columns: `issuer, cusip, class, shares, value_usd, put_call, pct_of_portfolio`. Rows are summed by CUSIP plus put/call, so Berkshire's many rows per issuer collapse to one. Built by `scripts/build13f.py` from the SEC's own filings and reconciled to each cover page; `sources.csv` names the accessions behind each quarter. Values are whole dollars; two Himalaya quarters (Q4 2023, Q1 2024) were filed in thousands and were multiplied up.
+- `holdings.csv`, every quarter in one file (columns `book, quarter, issuer, cusip, class, shares, value_usd, put_call, pct_of_portfolio`); `scripts/seed_baseline.py` unpacks it into one file per quarter in the working copy. Rows are summed by CUSIP plus put/call, so Berkshire's many rows per issuer collapse to one. Built by `scripts/build13f.py` from the SEC's own filings and reconciled to each cover page; `sources.csv` names the accessions behind each quarter. Values are whole dollars; two Himalaya quarters (Q4 2023, Q1 2024) were filed in thousands and were multiplied up.
 - `profile.md`, the brief: who runs the money, how they say they invest, the arc across the 12 quarters read oldest first, how to separate flows from views, what the 13F does not show, and what to watch next.
 - `log.md`, every filing and source read, in order, with what failed and why.
 
-Two folders differ. `scion/` covers Q4 2022 to Q3 2025, Burry's last 12 filings before Scion deregistered on 2025-11-10, then his public Substack. `fundsmith/holdings/fisl/` holds the 13Fs of Fundsmith's sister firm (see below).
+Two folders differ. `scion/` covers Q4 2022 to Q3 2025, Burry's last 12 filings before Scion deregistered on 2025-11-10, then his public Substack. Fundsmith's rows with `book` set to `fisl` are the 13Fs of its sister firm FISL, kept apart.
 
 ## Themes across managers
 

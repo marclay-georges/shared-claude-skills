@@ -194,16 +194,18 @@ what the investor says. That is the material the profile is about.
 
 The skill's `references/baseline/` is a snapshot taken on 2026-11-19 and is read-only wherever the
 skill is installed. Live state belongs in a working folder the user owns: their workspace, a
-project folder, or whatever durable storage the environment offers. On first use, copy the
-baseline there (one folder per investor) along with `scripts/managers.yaml`; from then on the
-working copy is the truth and every script takes `--config` and output paths pointing into it.
-Each investor's folder holds:
+project folder, or whatever durable storage the environment offers. On first use, run
+`scripts/seed_baseline.py --to <working folder>`. It copies `managers.yaml` and each investor's
+profile and log, and unpacks the bundled holdings (one combined `holdings.csv` per investor, since a
+skill can hold only 200 files) into one file per quarter. It never overwrites an existing file, so
+it is safe to re-run. From then on the working copy is the truth, and every script takes `--config`
+and output paths pointing into it. Each investor's folder holds:
 
 - `profile.md`, the understanding (see below);
 - `log.md`, every source read, in order, with what failed and why;
 - `holdings/YYYY-QN.csv`, one per quarter, columns `issuer, cusip, class, shares, value_usd,
   put_call, pct_of_portfolio`, rows summed by CUSIP plus put/call, plus `sources.csv` naming the
-  accessions behind each quarter;
+  accessions behind each quarter and where they came from;
 - optionally `nport/` with fund flows and holdings.
 
 If no working copy exists yet and nothing durable is available, say so in the report rather than
@@ -235,6 +237,7 @@ in 12 quarters for every investor.
   (`--raw-dir`).
 - `from_connector.py` copies filings fetched through the Beat and Raise connector out of the
   session transcript into the filing cache, so the other scripts read them as if downloaded.
+- `seed_baseline.py` sets up the working copy from the bundled snapshot (see above).
 - `managers.yaml` holds what the filings don't say: each investor's 13F filer CIKs (including
   second filers), related entities (fund trusts with their series id, private-fund vehicles,
   look-alikes to ignore), CUSIPs to keep out of weights, quarters filed in thousands, CUSIP

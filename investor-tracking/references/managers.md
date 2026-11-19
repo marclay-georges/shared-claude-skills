@@ -41,7 +41,7 @@ common percentage change is the flow rate. Booking 25:1 split (2026-Q2); Ashtead
 Rentals in March 2026 (a conversion, not a new buy).
 
 **Fundsmith** (`fundsmith`). Terry Smith. Two 13F filers: Fundsmith LLP (CIK 1569205) and its
-sister firm FISL (CIK 1868537), kept as a separate book in `holdings/fisl/`. The LLP filing holds
+sister firm FISL (CIK 1868537), kept as a separate book (`fisl`). The LLP filing holds
 about 74–78% of the group's US positions and blends several vehicles; Europe-listed holdings are
 off both. Smithson's liquidation shows as a near-uniform 58% cut in 2026-Q1. Read FISL whenever a
 name appears or disappears at only one of the two. The Fundsmith Equity ETF (ALPS Series Trust,
