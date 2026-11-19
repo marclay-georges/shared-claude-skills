@@ -4,14 +4,14 @@ description: >
   How to write anything a later session will act on: skills, agent and subagent prompts, session
   briefs, CLAUDE.md and memory edits, architecture documents, routine and scheduled-task prompts.
   Use whenever such a thing is being written, revised or reviewed, including a brief dashed off
-  mid-task, and when Clay says "descriptive over prescriptive," "our philosophy," asks how to
+  mid-task, and when the user says "descriptive over prescriptive," "our philosophy," asks how to
   make a skill, prompt or CLAUDE.md better, or refers to "the skill-writing philosophy."
 ---
 
 # Writing for a later reader
 
-Much of what gets written in this workspace is not for Clay. It is for a Claude that has not
-started yet: the skill a future session loads, the brief a subagent wakes up to, the line added to a
+Much of what gets written alongside real work is not for the person you work with. It is for a
+Claude that has not started yet: the skill a future session loads, the brief a subagent wakes up to, the line added to a
 CLAUDE.md, the routine that fires at six in the morning. That reader has less context than the
 writer, often cannot ask, and will act on the words. The test for whether a piece of writing falls
 under this document is exactly that: will someone with less context than you act on it later?
@@ -23,12 +23,11 @@ carry. This file is the reasoning behind it, for when you have time to think abo
 itself.
 
 Two outside sources recur below. "The context-engineering post" is Thariq Shihipar, "The new rules
-of context engineering for Claude 5 generation models," claude.com/blog, 2026-07-24; the workspace
-audit that applied it is `Projects/Career Cowork/.claude/CLAUDE-MD-AUDIT-2026-10-23.md`. "The
+of context engineering for Claude 5 generation models," claude.com/blog, 2026-07-24. "The
 prompting reference" is Anthropic's prompting best-practices documentation.
 
 Three kinds of reader show up most, and two things about them change how you write. The first is
-whether a human is reachable. A session document is read with Clay present. A brief goes to a
+whether a human is reachable. A session document is read with the user present. A brief goes to a
 subagent that should finish without asking. A routine runs with nobody there. The second is how
 often the text is paid for. A CLAUDE.md line is read every session for months. A brief is read
 once. A routine is read daily. Everything else in this document is the same for all three; the
@@ -56,10 +55,10 @@ and can tell when a situation falls outside it. The same instruction without its
 something they can only obey or ignore. So the question for each passage is not "should this be a
 rule or a principle" but "does the reader need exact adherence here, and do they know why."
 
-An example of the difference, from this workspace. Insistence: "**NEVER** edit RESUME-SOURCE.md
-directly. Always propose changes first." Purpose on the page: "RESUME-SOURCE.md is the only place
-resume facts live, and every build selects from it verbatim, so one edit there changes every future
-resume. Propose edits to it before making them." The boundary is just as firm in the second
+An example of the difference. Insistence: "**NEVER** edit PRICING.md directly. Always propose
+changes first." Purpose on the page: "PRICING.md is the only place prices live, and every quote and
+invoice reads from it verbatim, so one edit there changes every future quote. Propose edits to it
+before making them." The boundary is just as firm in the second
 version. The difference is that a reader can now tell what it protects, and so can recognize when a
 situation falls outside it.
 
@@ -73,8 +72,8 @@ say it.
 Write what the reader cannot infer from the territory. These are the unknown knowns: the things so
 obvious to the writer that they would never think to write them down, and that the reader would
 never guess. In a codebase they are the gotchas, the one
-place types live, the script that must run first. In a workflow they are Clay's actual preferences,
-the ruling he gave once that overrides the sensible default, the failure that happened and should
+place types live, the script that must run first. In a workflow they are the user's actual preferences,
+the ruling they gave once that overrides the sensible default, the failure that happened and should
 not happen again. The context-engineering post says to spend most of a CLAUDE.md's tokens there,
 and almost none on what a capable reader sees by looking.
 
@@ -164,7 +163,7 @@ right time, in place of one central repository the reader has to carry whole.
 The closing block is canonical. A document long enough to warrant one ends with its principles in
 compressed form: a named phrase and a sentence or two each, short enough to scan, specific enough
 to act on. It is not a summary. It is the form the reader carries when the longer text is gone.
-Clay's CLAUDE.md carries a shorter paraphrase of it as always-loaded text, and points here for the
+A CLAUDE.md can carry a shorter paraphrase of it as always-loaded text, pointing here for the
 reasoning.
 
 
@@ -176,7 +175,7 @@ behaves like something constrained by one.
 
 This matters more than it sounds, because of what the reader has already read before they reach
 your text. The harness prompt is prescriptive. Tool descriptions are prescriptive. Most CLAUDE.md
-files, including the ones in this workspace, are bullets, bold and tables. A descriptive paragraph
+files are bullets, bold and tables. A descriptive paragraph
 inside that is one voice against many, and it loses by default. That is the real reason the shapes
 above keep appearing in Claude-written text: they are the register of nearly everything Claude
 reads, so they are the register it writes.
@@ -207,8 +206,8 @@ tool whose status enumeration teaches its use without a single example; that is 
 
 ## Where the three readers differ
 
-A session document is paid for every session. CLAUDE.md, memory slots, Hot Context, the Brain
-Queue: every line is read at the start of every session for as long as it stays. So the bar for
+A session document is paid for every session. CLAUDE.md, always-loaded memory, a project's
+running notes: every line is read at the start of every session for as long as it stays. So the bar for
 inclusion is highest here, and the content should be the gotchas and preferences a reader could not
 infer. Keep durable rules and working state distinct; working state ages, and stale reads as
 current. Point rather than copy. A second copy of anything canonical will drift from the first, and
@@ -226,8 +225,8 @@ A routine has no one to ask. A scheduled prompt fires with nobody present, and i
 tomorrow. So it carries its own policy for the unexpected: what to do when an input is missing,
 when the world has changed since it was written, when the task cannot complete. A good default for
 deviations: pick the conservative option, log the deviation, keep going. Dates are absolute, because "this week" means something different every time it runs. The prompt is self-contained,
-because memory and Hot Context may be stale by the time it fires. And it says where its output
-lands and how Clay learns it ran, because a routine that finishes silently has not finished.
+because memory and running notes may be stale by the time it fires. And it says where its output
+lands and how the user learns it ran, because a routine that finishes silently has not finished.
 
 
 ## Iterating on what you wrote
@@ -250,8 +249,8 @@ process rather than structure. Start with the smallest version that could work, 
 reader uses it, and add depth only where you saw it struggle. Do not add a section because it might
 help. Add it because you watched its absence cost something.
 
-Subtract before adding. When revising, look first for what can leave or merge; the work-hygiene
-skill in this workspace says why. This iteration dropped the first version's standing section on
+Subtract before adding. When revising, look first for what can leave or merge, since a document
+that only ever grows gets harder to read with every pass. This iteration dropped the first version's standing section on
 its relationship to the skill-creator tool (the mechanics of testing and packaging live there, this
 file is about the writing, and one sentence says so), generalized the first version's
 browser-skill anecdotes, merged two sections that said the same thing about the reader, and
