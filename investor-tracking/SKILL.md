@@ -1,17 +1,6 @@
 ---
 name: investor-tracking
-description: >
-  Follow a set of professional investors (fund managers, superinvestors, activists) closely
-  enough to understand what they believe, why they hold what they hold, and when they change
-  their minds. Use when building a baseline profile of a manager, reading a new 13F or any other
-  filing by a tracked investor (13D/G, Form 4, N-PORT, N-CSR, N-PX, ADV), running a quarterly
-  check on a watchlist of managers, or answering "what did X buy or sell and why," "is this a
-  real decision or just fund flows," "what does X hold that the 13F doesn't show." Bundles
-  three-year baselines for 13 managers (Akre, AltaRock, Altimeter, Berkshire Hathaway, Dorsey,
-  Fundsmith, Greenlea Lane, Himalaya, Pershing Square, Polen, Scion, TCI, Valley Forge) and
-  scripts that fetch and parse SEC filings (needs Python and PyYAML, plus access to sec.gov
-  or the Beat and Raise connector).
-  Research and reading only.
+description: "Follow a set of professional investors (fund managers, superinvestors, activists) closely enough to understand what they believe, why they hold what they hold, and when they change their minds. Use when building a baseline profile of a manager, reading a new 13F or any other filing by a tracked investor (13D/G, Form 4, N-PORT, N-CSR, N-PX, ADV), running a quarterly check on a watchlist of managers, or answering \"what did X buy or sell and why,\" \"is this a real decision or just fund flows,\" \"what does X hold that the 13F doesn't show.\" Bundles three-year baselines for 13 managers (Akre, AltaRock, Altimeter, Berkshire Hathaway, Dorsey, Fundsmith, Greenlea Lane, Himalaya, Pershing Square, Polen, Scion, TCI, Valley Forge) and scripts that fetch and parse SEC filings (needs Python and PyYAML, plus access to sec.gov or the Beat and Raise connector). Research and reading only.\n"
 ---
 
 # Following investors
@@ -32,6 +21,34 @@ they only make sense once the sources and the noise are clear.
 
 Nothing here places, suggests or changes a trade. The output is understanding: what an investor
 did, what they said, and what it probably means, with the confidence of each claim stated.
+
+
+## First: is the Beat and Raise connector installed?
+
+The bundled profiles are a snapshot. Anything newer (a fresh 13F, a 13D, a Form 4) has to be
+fetched, and that needs either direct access to sec.gov or the Beat and Raise connector. Most chat
+sandboxes block sec.gov, so for most people the connector is what lets this skill keep up rather
+than just retell the snapshot. Check early, ideally in the first conversation, so the person can
+fix it once rather than hit the gap halfway through a quarterly check.
+
+To check, look among your tools for Beat and Raise ones (names containing `beatandraise`, such as
+`get_filings` and `get_document`). Where tools load on demand, search for them before concluding
+they're missing. If they're there, don't mention it; just use them when filings are needed.
+
+If they're missing, tell the person briefly, once, and pass on how to add it:
+
+- What it is: a free connector that serves exact copies of SEC filings from its own archive,
+  updated within minutes of the SEC. No payment is involved.
+- How to add it: in Claude, open Settings, then Connectors, then "Add custom connector". Name it
+  Beat and Raise and use the URL `https://beatandraise.com/mcp`. On a Team or Enterprise plan an
+  organization owner may need to add it first.
+- Afterwards: make sure it's switched on for the conversation (starting a new chat is the simplest
+  way to be sure it has loaded).
+
+Then carry on with whatever doesn't need new filings. The bundled profiles answer most first
+questions ("what does Berkshire hold that the 13F doesn't show?"), so a missing connector is a
+reason to mention the setup, not to stop. If the session can reach sec.gov directly (some Claude
+Code setups can), the connector is optional; mention it only as a fallback.
 
 
 ## Three kinds of statement
