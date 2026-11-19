@@ -260,7 +260,8 @@ ways to get them, and a rule for when neither works.
    from its own archive, updated within minutes of the SEC. On 2026-11-19 every 13F for all 13
    baseline investors, fetched through it and built by these scripts, matched the sec.gov build
    row for row. A connector is a tool the model calls, so its results land in the session, and
-   `from_connector.py` copies them from the session transcript into the filing cache untouched.
+   `from_connector.py` copies them from the session transcripts into the filing cache untouched; it
+   reads every transcript from the last day, so helpers fetching in parallel don't collide.
    The steps: call `get_filings` with the filer's CIK and the forms you need (for 13Fs,
    `13F-HR,13F-HR/A,13F-NT`); for each filing, call `get_document` on every `.xml` file in its
    `content_object` with `get_markdown` set to false; then run `from_connector.py --cache <cache>`

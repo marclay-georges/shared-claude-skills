@@ -15,8 +15,13 @@ shape as the SEC's own submission file (a short header, then each XML document),
 build13f.py and nport.py read it exactly as they read a direct download. An accession whose
 documents are incomplete is reported and skipped.
 
-    python from_connector.py --cache /path/to/cache                    # newest transcript
-    python from_connector.py --cache /path/to/cache --transcript FILE.jsonl
+Several sessions or helpers may fetch at once, each writing its own transcript, so by default it
+reads every transcript written in the last day rather than guessing which one is this session's.
+That is safe: a filing never changes, so the same accession found twice gives the same file, and a
+filing is written only when its metadata and every one of its XML documents were found.
+
+    python from_connector.py --cache /path/to/cache                    # transcripts from the last 24 hours
+    python from_connector.py --cache /path/to/cache --transcript FILE.jsonl [--transcript ...]
 """
 import argparse
 import glob
@@ -24,14 +29,17 @@ import json
 import os
 import re
 import sys
+import time
 
 
-def newest_transcript():
-    """The most recently written session transcript under ~/.claude/projects."""
+def recent_transcripts(hours):
+    """Every session transcript (helpers' included) under ~/.claude/projects written in the last `hours`."""
+    cutoff = time.time() - hours * 3600
     candidates = glob.glob(os.path.expanduser('~/.claude/projects/**/*.jsonl'), recursive=True)
-    if not candidates:
-        sys.exit('no transcript found under ~/.claude/projects; pass --transcript')
-    return max(candidates, key=os.path.getmtime)
+    recent = [p for p in candidates if os.path.getmtime(p) >= cutoff]
+    if not recent:
+        sys.exit(f'no transcript written in the last {hours} hours under ~/.claude/projects; pass --transcript')
+    return recent
 
 
 def result_text(content):
@@ -91,12 +99,17 @@ def xml_block(text):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--cache', required=True, help='filing cache; files go to <cache>/filings/<cik>/')
-    parser.add_argument('--transcript', help='session transcript (.jsonl); default: the newest one')
+    parser.add_argument('--transcript', action='append', help='a session transcript (.jsonl); repeatable. Default: all from the last --hours')
+    parser.add_argument('--hours', type=float, default=24, help='how far back to look for transcripts (default 24)')
     args = parser.parse_args()
 
-    transcript = args.transcript or newest_transcript()
-    calls, results = read_transcript(transcript)
-    print(f'Reading {transcript}: {len(results)} connector results')
+    transcripts = args.transcript or recent_transcripts(args.hours)
+    calls, results = {}, {}
+    for transcript in transcripts:
+        more_calls, more_results = read_transcript(transcript)
+        calls.update(more_calls)
+        results.update(more_results)
+    print(f'Read {len(transcripts)} transcript(s): {len(results)} connector results')
 
     ### filing metadata from get_filings and get_filing_detail
     filings = {}
