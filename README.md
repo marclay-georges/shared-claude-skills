@@ -21,8 +21,11 @@ zip -r investor-tracking.skill investor-tracking -x '*/__pycache__/*'
 
 ## investor-tracking setup
 
-The scripts need Python 3, PyYAML (`pip install pyyaml`) and network access to sec.gov. The SEC
-has no API key, but it asks every automated client for a name and contact email. Supply your own
+The scripts need Python 3 and PyYAML (`pip install pyyaml`), plus a way to reach SEC filings:
+either sec.gov directly, or, where a sandbox blocks it, the free Beat and Raise connector
+(`https://beatandraise.com/mcp`, added in Claude's settings as a custom connector).
+`investor-tracking/SKILL.md` explains both. For sec.gov, the SEC has no API key, but it asks every
+automated client for a name and contact email. Supply your own
 in one of these places; never put it inside the skill folder:
 
 - the `SEC_USER_AGENT` environment variable, e.g. `export SEC_USER_AGENT="Jane Doe jane@example.com"`;

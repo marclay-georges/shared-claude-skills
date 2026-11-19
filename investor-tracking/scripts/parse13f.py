@@ -75,6 +75,7 @@ def _base_record(text):
         'form': form,
         'period': f'{period[:4]}-{period[4:6]}-{period[6:]}' if period else None,
         'filed': f'{filed[:4]}-{filed[4:6]}-{filed[6:]}' if filed else None,
+        'source': (re.search(r'^SOURCE:\s*(.+)$', text, flags=re.M) or [None, 'sec.gov'])[1].strip(),
     }
 
 
@@ -128,7 +129,7 @@ def parse_xml(text):
                 'other_manager': _text(it, 'otherManager', ''),
             })
     record['rows'] = rows
-    record['source'] = 'xml'
+    record['format'] = 'xml'
     return record
 
 
@@ -197,7 +198,7 @@ def parse_stripped(text):
             'other_manager': '',
         })
     record['rows'] = rows
-    record['source'] = 'stripped'
+    record['format'] = 'stripped'
     return record
 
 
@@ -246,7 +247,7 @@ def main():
         records.append(record)
         rec = record['reconciled']
         status = 'OK' if rec['ok'] else f'MISMATCH rows {rec["row_gap"]:+d} value {rec["value_gap"]:+,d}'
-        print(f'{record["accession"]}  {record["form"]:<9} {record["period"]}  {record["source"]:<8} {record["report_type"]:<22} {record["amendment_type"] or "":<12} rows {len(record["rows"]):>4}/{record["entries"]:<4} {status}')
+        print(f'{record["accession"]}  {record["form"]:<9} {record["period"]}  {record["format"]:<8} {record["report_type"]:<22} {record["amendment_type"] or "":<12} rows {len(record["rows"]):>4}/{record["entries"]:<4} {status}')
 
     if args.json:
         with open(args.json, 'w') as f:

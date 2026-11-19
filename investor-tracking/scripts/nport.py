@@ -14,6 +14,7 @@ Writes flows.csv (one row per month) and holdings/<period end>.csv (one per fili
 """
 import argparse
 import csv
+import glob
 import os
 import re
 import sys
@@ -74,12 +75,47 @@ def parse_nport(text):
     return record
 
 
+def write_holdings(out, period, record):
+    path = os.path.join(out, 'holdings', f'{period}.csv')
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=list(record['holdings'][0].keys()) if record['holdings'] else ['name'])
+        writer.writeheader()
+        writer.writerows(record['holdings'])
+
+
+def read_saved(raw_dir, funds, since, out):
+    """N-PORT submissions saved under raw_dir (any depth), filtered to the investor's funds."""
+    wanted = {(str(int(cik)), series) for cik, series in funds}
+    flow_rows = []
+    for path in sorted(glob.glob(os.path.join(os.path.expanduser(raw_dir), '**', '*.txt'), recursive=True)):
+        with open(path, encoding='utf-8', errors='replace') as f:
+            text = f.read()
+        if not re.search(r'CONFORMED SUBMISSION TYPE:\s*NPORT', text):
+            continue
+        cik = str(int(re.search(r'CENTRAL INDEX KEY:\s*(\d+)', text).group(1)))
+        filed = re.search(r'FILED AS OF DATE:\s*(\d{8})', text).group(1)
+        if f'{filed[:4]}-{filed[4:6]}-{filed[6:]}' < since:
+            continue
+        record = parse_nport(text)
+        if record is None or not any(c == cik and (s is None or s == record['series_id']) for c, s in wanted):
+            continue
+        accession = re.search(r'ACCESSION NUMBER:\s*(\S+)', text).group(1)
+        print(f'  {record["period_end"]} {accession} (saved): net assets ${record["net_assets"]:,.0f}, {len(record["holdings"])} holdings')
+        write_holdings(out, record['period_end'], record)
+        for flow in record['flows']:
+            flow_rows.append({'series': record['series_id'] or '', 'period_end': record['period_end'], 'accession': accession,
+                              'form': 'NPORT-P', 'net_assets_at_period_end': record['net_assets'], **flow})
+    return flow_rows
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--investor', help='slug; uses its related entities that carry a series id')
     parser.add_argument('--cik')
     parser.add_argument('--series')
     parser.add_argument('--since', required=True, help='filing date, YYYY-MM-DD')
+    parser.add_argument('--raw-dir', help='read N-PORT submissions already saved here (e.g. by from_connector.py) instead of fetching')
     parser.add_argument('--cache', required=True)
     parser.add_argument('--out', required=True)
     parser.add_argument('--config')
@@ -97,6 +133,9 @@ def main():
 
     cache, out = os.path.expanduser(args.cache), os.path.expanduser(args.out)
     flow_rows = []
+    if args.raw_dir:
+        flow_rows = read_saved(args.raw_dir, funds, args.since, out)
+        funds = []
     for cik, series in funds:
         print(f'Reading N-PORT filings for {cik} {series or "(single fund)"}...')
         _, rows = edgar.filings(cik, cache, since=args.since)
@@ -117,13 +156,7 @@ def main():
             period = record['period_end']
             print(f'  {period} {r["form"]} {r["accessionNumber"]}: net assets ${record["net_assets"]:,.0f}, {len(record["holdings"])} holdings')
 
-            ### holdings file per period end
-            path = os.path.join(out, 'holdings', f'{period}.csv')
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, 'w', newline='') as f:
-                writer = csv.DictWriter(f, fieldnames=list(record['holdings'][0].keys()) if record['holdings'] else ['name'])
-                writer.writeheader()
-                writer.writerows(record['holdings'])
+            write_holdings(out, period, record)
 
             for flow in record['flows']:
                 flow_rows.append({'series': series or record['series_id'] or '', 'period_end': period, 'accession': r['accessionNumber'],

@@ -39,7 +39,10 @@ the SEC asks automated clients to send a User-Agent naming the requester with a 
 
 ## When sec.gov is blocked
 
-Report it rather than working around it. A web-reading tool pointed at a filing's `.txt` URL returns
-the submission with its tags stripped, and `build13f.py --raw-dir` can build from saved copies, but a
-web reader may serve a cached or partial page, so holdings built that way are unverified. Use them
-only when the user asks, and label them as such.
+Use the Beat and Raise connector (`https://beatandraise.com/mcp`): `get_filings` lists filings by
+CIK and form, `get_filing_detail` gives one filing's documents, and `get_document` with
+`get_markdown=false` returns a document's raw XML, which `scripts/from_connector.py` saves for the
+other scripts. Its `search_filings` is a full-text search, and its `verify_figure` and
+`verify_quote` check that a number or sentence really appears in a filing. Avoid its `get_holdings`
+for quarter-to-quarter work (it silently falls back to an earlier filing). Don't use a web-reading
+tool's copy of a filing in place of either source.

@@ -190,7 +190,7 @@ def build(slug, investor, first, last, cache, out, raw_dir=None):
             if not rows:
                 print(f'  {slug} {book or "main"} {quarter}: no holdings rows (' + '; '.join(u for _, u in used) + ')')
                 for f, how in used:
-                    source_lines.append([quarter, f['accession'], f['form'], f['filed'], f['filer_cik'], how])
+                    source_lines.append([quarter, f['accession'], f['form'], f['filed'], f['filer_cik'], how, f['source']])
                 continue
             for fix in investor.get('corrections') or []:
                 if fix['quarter'] != quarter:
@@ -204,7 +204,7 @@ def build(slug, investor, first, last, cache, out, raw_dir=None):
             totals[quarter] = total
             write_csv(os.path.join(book_out, f'{quarter}.csv'), lines)
             for f, how in used:
-                source_lines.append([quarter, f['accession'], f['form'], f['filed'], f['filer_cik'], how])
+                source_lines.append([quarter, f['accession'], f['form'], f['filed'], f['filer_cik'], how, f['source']])
             note = ' (values x1000)' if multiplier > 1 else ''
             print(f'  {slug} {book or "main"} {quarter}: {len(lines)} lines, ${total:,}{note}, from {len(used)} filing(s)')
 
@@ -215,7 +215,7 @@ def build(slug, investor, first, last, cache, out, raw_dir=None):
             os.makedirs(book_out, exist_ok=True)
             with open(os.path.join(book_out, 'sources.csv'), 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['quarter', 'accession', 'form', 'filed', 'filer_cik', 'how_used'])
+                writer.writerow(['quarter', 'accession', 'form', 'filed', 'filer_cik', 'how_used', 'source'])
                 writer.writerows(source_lines)
     return ok
 

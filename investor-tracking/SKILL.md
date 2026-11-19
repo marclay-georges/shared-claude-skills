@@ -9,7 +9,8 @@ description: >
   real decision or just fund flows," "what does X hold that the 13F doesn't show." Bundles
   three-year baselines for 13 managers (Akre, AltaRock, Altimeter, Berkshire Hathaway, Dorsey,
   Fundsmith, Greenlea Lane, Himalaya, Pershing Square, Polen, Scion, TCI, Valley Forge) and
-  scripts that fetch and parse SEC filings (needs Python, PyYAML and access to sec.gov).
+  scripts that fetch and parse SEC filings (needs Python and PyYAML, plus access to sec.gov
+  or the Beat and Raise connector).
   Research and reading only.
 ---
 
@@ -230,31 +231,49 @@ in 12 quarters for every investor.
   each name's deviation from it, likely unlisted splits, and a rough dollars-traded estimate.
 - `watch.py` lists every new filing of any form by or about each tracked entity, with a note on
   what each form can tell you and the subject company of ownership filings.
-- `nport.py` reads a fund's N-PORTs into monthly flows and full holdings.
+- `nport.py` reads a fund's N-PORTs into monthly flows and full holdings, fetched or saved
+  (`--raw-dir`).
+- `from_connector.py` copies filings fetched through the Beat and Raise connector out of the
+  session transcript into the filing cache, so the other scripts read them as if downloaded.
 - `managers.yaml` holds what the filings don't say: each investor's 13F filer CIKs (including
   second filers), related entities (fund trusts with their series id, private-fund vehicles,
   look-alikes to ignore), CUSIPs to keep out of weights, quarters filed in thousands, CUSIP
   aliases, sourced corrections for filer errors, accepted reconciliation gaps, and a shared table
   of splits. When you learn one of these things, it goes here rather than into a script.
 
-**Access to sec.gov is required, and accuracy comes first.** Holdings are built only from filings
-the scripts fetch from sec.gov themselves. The SEC has no API key; it asks every automated client to
-name itself in the User-Agent header with a contact email. The scripts look for that line in the
-`SEC_USER_AGENT` environment variable, then in a one-line file: the path in `SEC_USER_AGENT_FILE`,
-`sec_user_agent.txt` beside the working copy's `managers.yaml`, or
-`~/.config/investor-tracking/sec_user_agent.txt`. Each person sets their own, and it never goes in
-the skill folder, which is shared. (Commercial resellers such as sec-api.io use keys, but they are
-not the SEC and are not needed.) Filings never change once accepted, so they are cached forever;
-filing lists are refetched each run.
+**Where filings come from, in order of preference.** Accuracy comes first, so holdings are built
+only from exact copies of the filings, parsed and reconciled by the scripts. There are two tested
+ways to get them, and a rule for when neither works.
 
-**When sec.gov can't be reached, stop and say so.** Don't substitute a web-reading tool's copy of a
-filing. A web reader can serve a cached, partial or outdated page, and the EDGAR listings it reads
-have been stale before; a quarter built from such a copy looks exactly as trustworthy as a real one.
-Report which investors couldn't be fetched and why, and finish the parts of the work that don't need
-new filings. `parse13f.py` can still read a tag-stripped copy (it was built to check the earlier
-hand-typed baseline), and `build13f.py --raw-dir` will build from saved copies, but treat anything
-built that way as unverified and use it only if the user asks for it, saying so in the report.
-`watch.py --offline` reads only filing lists already in the cache and names what it skipped.
+1. *Directly from sec.gov*, when the environment can reach it. The SEC has no API key; it asks
+   every automated client to name itself in the User-Agent header with a contact email. The scripts
+   look for that line in the `SEC_USER_AGENT` environment variable, then in a one-line file: the
+   path in `SEC_USER_AGENT_FILE`, `sec_user_agent.txt` beside the working copy's `managers.yaml`, or
+   `~/.config/investor-tracking/sec_user_agent.txt`. Each person sets their own, never inside the
+   skill folder, which is shared. (Commercial resellers such as sec-api.io use keys; they are not
+   the SEC and are not needed.)
+2. *Through the Beat and Raise connector* (`https://beatandraise.com/mcp`, free, added as a custom
+   connector), when a sandbox's network blocks sec.gov. It serves exact copies of EDGAR documents
+   from its own archive, updated within minutes of the SEC. On 2026-11-19 every 13F for all 13
+   baseline investors, fetched through it and built by these scripts, matched the sec.gov build
+   row for row. A connector is a tool the model calls, so its results land in the session, and
+   `from_connector.py` copies them from the session transcript into the filing cache untouched.
+   The steps: call `get_filings` with the filer's CIK and the forms you need (for 13Fs,
+   `13F-HR,13F-HR/A,13F-NT`); for each filing, call `get_document` on every `.xml` file in its
+   `content_object` with `get_markdown` set to false; then run `from_connector.py --cache <cache>`
+   and build as usual. `sources.csv` records the source of every quarter. Use the raw documents,
+   not the connector's `get_holdings`: when a quarter is missing it falls back to the latest
+   earlier filing without saying so, so a late filer would look like an unchanged one. The
+   connector's `get_filings` across all forms also serves as the watch list where `watch.py`
+   can't run.
+3. *Neither*: stop and say so. Don't substitute a web-reading tool's copy of a filing, which can be
+   cached, partial or outdated while looking exactly as trustworthy, and never retype rows. Report
+   which investors couldn't be fetched and finish what doesn't need new filings. `parse13f.py`
+   can read a tag-stripped copy and `build13f.py --raw-dir` will build from saved copies, but
+   anything built that way is unverified; use it only if the user asks, and say so.
+
+Filings never change once accepted, so they are cached forever; filing lists are refetched each
+run. `watch.py --offline` reads only filing lists already in the cache and names what it skipped.
 
 A quarter that won't reconcile is the scripts working, not failing. Find out whether the gap is in
 your copy (re-fetch) or in the filing itself (the filer's own rows don't add up). Only the second
@@ -396,9 +415,10 @@ self-stakes, filer errors and the lag explain most changes. What survives is the
 **The 13F is a slice.** Know how much of each book it shows and what it leaves out, and say where
 it misleads for each investor.
 
-**Fetch from the source.** Holdings come from filings the scripts fetch from sec.gov, parsed and
-reconciled to the cover. No retyping and no web-reader substitutes; when the SEC can't be reached,
-report it. A gap is something to explain, not to round away.
+**Exact copies only.** Holdings come from the SEC's own files, fetched from sec.gov or from an
+archive proven to match it, parsed and reconciled to the cover. No retyping and no web-reader
+substitutes; when neither source is reachable, report it. A gap is something to explain, not to
+round away.
 
 **Propose, don't overwrite.** Updates end in a report and proposed profile edits. The baseline is
 trusted because it was reviewed.
