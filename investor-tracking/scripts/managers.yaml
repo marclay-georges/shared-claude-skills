@@ -1,0 +1,152 @@
+# What the scripts need to know about each investor that the filings themselves don't say.
+#
+# filers_13f   every CIK whose 13F holds this investor's book. `book` names a separate output
+#              folder for a second filer whose book should stay apart (Fundsmith's FISL);
+#              filers without one are summed into the main book.
+# related      other entities whose filings matter: fund trusts (N-PORT, N-CSR) with the
+#              series id that is this investor's fund, or `nport: true` for a single-fund
+#              filer; private-fund vehicles (Form D); feeders; look-alikes to ignore.
+#              watch.py lists their new filings too.
+# exclude_from_weights   CUSIPs left in the holdings file (it mirrors the filing) but left
+#              out of weights and flow rates in diff13f.py.
+# thousands_quarters     quarters the filer reported in thousands of dollars despite the
+#              rule (whole dollars since January 2023); build13f.py multiplies them up.
+# cusip_aliases          old CUSIP -> current CUSIP for the same security.
+# corrections  per-quarter fixes for errors the filer never amended (today: issuer names
+#              only), applied by build13f.py and recorded in that investor's log. Keep these
+#              rare and sourced.
+# accepted_gaps          filings whose own rows don't add up to their cover page, accepted
+#              after checking that the gap is the filer's and immaterial. build13f.py refuses
+#              any other filing that doesn't reconcile.
+#
+# CIKs are plain integers. Adding an investor: give it a slug, its 13F filer CIK(s), and
+# whatever related entities you find while building its baseline.
+
+investors:
+  akre:
+    name: Akre Capital Management
+    filers_13f:
+      - {cik: 1112520, label: Akre Capital Management LLC}
+    related:
+      - {cik: 811030, label: "Professionally Managed Portfolios (Akre Focus ETF trust)", series: S000089351, note: "ETF since Oct 2025; the mutual fund before it was S000026760"}
+      - {cik: 1697927, label: "Braddock Partners Offshore, LP (other included manager)"}
+      - {cik: 1406947, label: "Braddock Partners, LP (Form D)"}
+      - {cik: 1407066, label: "Braddock Partners Offshore, Ltd. (Form D)"}
+
+  altarock:
+    name: AltaRock Partners
+    filers_13f:
+      - {cik: 1631014, label: AltaRock Partners LP}
+    related:
+      - {cik: 1172921, label: "AltaRock Fund LP (Form D)"}
+      - {cik: 1630718, label: "BBH Wealth Strategies - AltaRock Partners Series (feeder, Form D)"}
+
+  altimeter:
+    name: Altimeter Capital Management
+    filers_13f:
+      - {cik: 1541617, label: "Altimeter Capital Management, LP"}
+    related:
+      - {cik: 1452343, label: "Altimeter Partners Fund LP (Form D)"}
+    cusip_aliases:
+      G0370L116: G4124C117   # Grab warrants, same 3,502,000 warrants under a new CUSIP from 2026-Q2
+    corrections:
+      - {quarter: 2024-Q2, cusip: "023135106", issuer: AMAZON COM INC, why: "filing paired Amazon's and Astera Labs' names with each other's CUSIPs; never amended"}
+      - {quarter: 2024-Q2, cusip: 04626A103, issuer: ASTERA LABS INC, why: "see the Amazon correction"}
+      - {quarter: 2024-Q3, cusip: 53566V106, issuer: LINEAGE INC, why: "filed as Lineage Cell Therapeutics; the CUSIP is Lineage, Inc., the cold-storage REIT"}
+    accepted_gaps:
+      - {accession: 0001541617-26-000010, why: "Q3 2026 rows sum $344,388 below the cover total in the filer's own XML (0.003%); no amendment as of 2026-11-19"}
+
+  berkshire-hathaway:
+    name: Berkshire Hathaway
+    filers_13f:
+      - {cik: 1067983, label: Berkshire Hathaway Inc}
+
+  dorsey:
+    name: Dorsey Asset Management
+    filers_13f:
+      - {cik: 1671657, label: "Dorsey Asset Management, LLC"}
+    related:
+      - {cik: 1636453, label: "Global Moat Fund LP (Form D)"}
+      - {cik: 1661112, label: "DAM SIF I LP (Form D)"}
+
+  fundsmith:
+    name: Fundsmith
+    filers_13f:
+      - {cik: 1569205, label: Fundsmith LLP}
+      - {cik: 1868537, label: "Fundsmith Investment Services Ltd (FISL)", book: fisl}
+    related:
+      - {cik: 1558107, label: "ALPS Series Trust (Fundsmith Equity ETF, ETFT)", series: S000097194, note: "launched Dec 2025"}
+
+  greenlea-lane:
+    name: Greenlea Lane Capital Management
+    filers_13f:
+      - {cik: 1766504, label: "Greenlea Lane Capital Management, LLC"}
+    related:
+      - {cik: 1413048, label: "Greenlea Lane Capital Partners LP (Form D)"}
+
+  himalaya:
+    name: Himalaya Capital Management
+    filers_13f:
+      - {cik: 1709323, label: Himalaya Capital Management LLC}
+    related:
+      - {cik: 1576745, label: "Himalaya Capital Investors, L.P. (Form D)"}
+      - {cik: 1747706, label: "Himalaya Capital Investors (Offshore), L.P. (Form D)"}
+      - {cik: 2078361, label: "iCapital-Himalaya Capital Investors feeder (Form D)"}
+      - {cik: 2094573, label: "Himalaya Capital Ltd: a look-alike, NOT Li Lu's firm", ignore: true}
+    thousands_quarters: [2023-Q4, 2024-Q1]   # cover totals 2,059,252 and 2,260,390; see the baseline log
+
+  pershing-square:
+    name: Pershing Square
+    filers_13f:
+      - {cik: 1336528, label: "Pershing Square Capital Management, L.P. (filer through Q1 2026; 13F-NT since)"}
+      - {cik: 2026053, label: "Pershing Square Inc. (filer from Q2 2026)"}
+    related:
+      - {cik: 2002660, label: "Pershing Square USA (PSUS)", nport: true, note: "N-PORT and N-CSR; a closed-end fund with no series id"}
+      - {cik: 1324919, label: "Pershing Square International, Ltd. (Form D)"}
+    exclude_from_weights:
+      - {cusip: 71531U102, why: "Pershing Square Inc.'s stake in itself, about $10.3B in 2026; not part of the investment book"}
+
+  polen:
+    name: Polen Capital Management
+    filers_13f:
+      - {cik: 1034524, label: "Polen Capital Management, LLC"}
+    related:
+      - {cik: 1388485, label: "FundVantage Trust (Polen Growth Fund)", series: S000029264}
+      - {cik: 1010422, label: "Polen Capital Credit"}
+
+  scion:
+    name: Scion Asset Management
+    status: "Deregistered 2025-11-10; last 13F covers 2025-Q3. Watch for a new filer, not for new 13Fs."
+    filers_13f:
+      - {cik: 1649339, label: "Scion Asset Management, LLC"}
+    related:
+      - {cik: 1768021, label: "Scion Asset Partners, LP (included manager)"}
+      - {cik: 1768023, label: "Scion Capital Group, LLC (included manager)"}
+      - {cik: 1586364, label: "Scion G7, L.P. (Form D)"}
+
+  tci:
+    name: TCI Fund Management
+    filers_13f:
+      - {cik: 1647251, label: TCI Fund Management Limited}
+
+  valley-forge:
+    name: Valley Forge Capital Management
+    filers_13f:
+      - {cik: 1697868, label: "Valley Forge Capital Management, LP"}
+    related:
+      - {cik: 1473337, label: "Valley Forge Capital, L.P. (Form D)"}
+
+# Splits and other share-count changes that are not trades. `ratio` is new shares per old
+# share (3-for-2 is 1.5); `quarter` is the quarter whose 13F first shows post-split counts.
+# diff13f.py multiplies the earlier quarter's share count by the ratio when that quarter
+# falls after the earlier one and no later than the later one. Shared across investors,
+# since a split hits every holder. diff13f.py also flags share jumps whose implied price
+# moved by a split-like ratio, so a missing entry shows up rather than reading as a trade.
+corporate_actions:
+  - {cusip: 67066G104, issuer: NVIDIA, type: split, ratio: 10, quarter: 2024-Q2, when: "June 2024"}
+  - {cusip: 169656105, issuer: Chipotle Mexican Grill, type: split, ratio: 50, quarter: 2024-Q2, when: "June 2024"}
+  - {cusip: 67103H107, issuer: "O'Reilly Automotive", type: split, ratio: 15, quarter: 2025-Q2, when: "June 2025"}
+  - {cusip: 11271J107, issuer: Brookfield Corp, type: split, ratio: 1.5, quarter: 2025-Q4, when: "paid 2025-10-09"}
+  - {cusip: 64110L106, issuer: Netflix, type: split, ratio: 10, quarter: 2025-Q4, when: "November 2025"}
+  - {cusip: 81762P102, issuer: ServiceNow, type: split, ratio: 5, quarter: 2025-Q4, when: "late 2025"}
+  - {cusip: 09857L108, issuer: Booking Holdings, type: split, ratio: 25, quarter: 2026-Q2, when: "after the close 2026-04-02"}

@@ -1,0 +1,98 @@
+# Greenlea Lane Capital Management (CIK 0001766504) — research log
+
+Written 2026-11-19 by a helper session. Drafts for review.
+
+## Anything odd (read this first)
+
+- **Coverage is complete.** The firm has filed 13Fs since Q4 2018, so all twelve quarters Q4 2023 to Q3 2026 exist. No 13F-NT notices. Every filing was on time (Q4 2025 filed 2026-02-17 and Q3 2026 filed 2026-11-16, both the next business day after a weekend/holiday deadline).
+- **One amendment.** Q2 2025: the original 13F-HR (0001420506-25-001997, filed 2025-08-14 08:26) reported Brookfield Corp under CUSIP 112585104, the old Brookfield Asset Management Inc. CUSIP. A 13F-HR/A marked RESTATEMENT, amendment no. 1 (0001420506-25-002187, filed the same day at 16:48) is identical except that the Brookfield CUSIP is corrected to 11271J107. The CSV uses the amendment. Nothing else changed (same 8 rows, same $355,479,048 total).
+- **All twelve quarters reconcile exactly** to the cover page (row count and total value). See the table below.
+- **Units: whole dollars in every quarter; no ×1,000 adjustment was needed.** This was checked after the coordinator warned that some filers still reported in thousands in 2023-Q4 and 2024-Q1. Three checks agree. First, each cover total equals the row sum. Second, totals sit in a steady $289M–$366M band with no thousand-fold jump between quarters. Third, every row's value divided by its shares gives a believable market price at quarter-end, including the first two quarters: in 2023-Q4, Amazon $151.94, Berkshire A $542,625, Microsoft $376.04, Markel $1,419.90; in 2024-Q1, Amazon $180.38. The Q4 2022 context filing is also in whole dollars ($210,125,539).
+- **Stock splits inside the period:** Brookfield Corp 3-for-2, paid 2025-10-09 (record 2025-10-03). The jump in BN shares from 952,215 (Q3 2025) to 1,413,462 (Q4 2025) is the split, not a purchase; split-adjusted it is a ~1% trim. Netflix 10-for-1, effective 2025-11-14; Greenlea did not hold Netflix then (it re-entered in Q1 2026 post-split), but pre-2023 Netflix share counts in older 13Fs are pre-split. Older splits (Amazon 20:1 and Alphabet 20:1 in 2022, Tesla 3:1 in 2022) matter only when comparing against pre-2022 filings.
+- **Filer details:** filing agent CIK 0001420506 (accession prefix) since 2021; before that 0001387131. Cover page: report type "13F HOLDINGS REPORT", 0 other included managers in every quarter, no other-manager column used, all rows SH (no PRN), all SOLE investment discretion and sole voting, no put/call rows (no options) in any quarter. No confidential-treatment omissions are indicated. Signature block changed in Q2 2026 from "JOSH TARASOFF, CHIEF COMPLIANCE OFFICER" to "JOSH TARASOFF" (cosmetic).
+- **Issuer names normalized.** The Q2 2025 filings used slightly different issuer strings ("ALPHABET INC CAP STK", "MARKEL CORP COM", "BURFORD CAPITAL LTD", etc.); the CSVs use the standard EDGAR names used in the other quarters. Values and CUSIPs are as filed.
+- **The 13F covers only part of the firm's assets.** Form ADV reports regulatory AUM of $461,851,769 at 2025-12-31 versus a 13F total of $342,653,497 the same day: about $119M (26%) is in things a 13F does not list (most plausibly Treasury bills/cash held directly; possibly non-US shares). A secondary source (Insider Monkey, quoting the March 2024 ADV) gives $366,097,582 at 2023-12-31 versus a 13F of $322,907,038, a gap of about $43M (12%). I could not open the 2024 and 2025 ADV filings themselves, so the 2023 figure is secondary.
+- **N-PX share counts do not always equal 13F share counts** (see N-PX section): Microsoft at the 2023 record date (57,990 voted vs 89,640 on the 2023-09-30 13F) and Netflix at the 2026 record date (213,069 voted vs 279,480 on the 2026-03-31 13F). Either positions moved between dates or some shares were not voted. Unresolved.
+
+## Reconciliation, 13F filings in scope
+
+| Quarter (period end) | Form | Accession | Filed | Cover entries | Cover total ($) | Parsed rows / total | Result |
+|---|---|---|---|---|---|---|---|
+| 2023-Q4 (2023-12-31) | 13F-HR | 0001420506-24-000337 | 2024-02-14 | 10 | 322,907,038 | 10 / 322,907,038 | match |
+| 2024-Q1 (2024-03-31) | 13F-HR | 0001420506-24-000906 | 2024-05-15 | 10 | 353,106,850 | 10 / 353,106,850 | match |
+| 2024-Q2 (2024-06-30) | 13F-HR | 0001420506-24-001499 | 2024-08-14 | 9 | 366,422,825 | 9 / 366,422,825 | match |
+| 2024-Q3 (2024-09-30) | 13F-HR | 0001420506-24-002439 | 2024-11-14 | 9 | 329,506,644 | 9 / 329,506,644 | match |
+| 2024-Q4 (2024-12-31) | 13F-HR | 0001420506-25-000474 | 2025-02-14 | 8 | 331,656,831 | 8 / 331,656,831 | match |
+| 2025-Q1 (2025-03-31) | 13F-HR | 0001420506-25-001012 | 2025-05-13 | 8 | 289,431,833 | 8 / 289,431,833 | match |
+| 2025-Q2 (2025-06-30) | 13F-HR (superseded) | 0001420506-25-001997 | 2025-08-14 | 8 | 355,479,048 | — | superseded by /A |
+| 2025-Q2 (2025-06-30) | 13F-HR/A restatement | 0001420506-25-002187 | 2025-08-14 | 8 | 355,479,048 | 8 / 355,479,048 | match (used) |
+| 2025-Q3 (2025-09-30) | 13F-HR | 0001420506-25-003244 | 2025-11-14 | 8 | 342,962,807 | 8 / 342,962,807 | match |
+| 2025-Q4 (2025-12-31) | 13F-HR | 0001420506-26-000460 | 2026-02-17 | 8 | 342,653,497 | 8 / 342,653,497 | match |
+| 2026-Q1 (2026-03-31) | 13F-HR | 0001420506-26-000887 | 2026-05-11 | 9 | 344,294,052 | 9 / 344,294,052 | match |
+| 2026-Q2 (2026-06-30) | 13F-HR | 0001420506-26-001649 | 2026-08-14 | 10 | 364,211,495 | 10 / 364,211,495 | match |
+| 2026-Q3 (2026-09-30) | 13F-HR | 0001420506-26-002741 | 2026-11-16 | 9 | 348,404,561 | 9 / 348,404,561 | match |
+
+URLs: each is `https://www.sec.gov/Archives/edgar/data/1766504/<accession without dashes>/<accession>.txt` (full submission, cover plus information table). Archive directory: https://www.sec.gov/Archives/edgar/data/1766504/ (read 2026-11-19; lists 36 accession folders, newest 000142050626002741 dated 2026-11-16).
+
+Method: fetched each full-submission .txt with Exa web_fetch (the tables are small, about 4 KB), transcribed the rows into a Python data file in the session's scratch directory, summed by CUSIP plus put/call (no duplicates arose; each quarter had one row per CUSIP), checked totals and counts against the cover summary page, wrote CSVs.
+
+## Earlier 13Fs read for context (outside the period)
+
+- Q4 2018, 0001387131-19-001178 (first 13F; values in thousands; two rows per stock, one with no voting authority): Amazon, Brookfield Asset Mgmt (old CUSIP 112585104), KKR, Netflix, Shake Shack, Spotify, Trupanion, Wayfair. https://www.sec.gov/Archives/edgar/data/1766504/000138713119001178/0001387131-19-001178.txt
+- Q4 2020, 0001387131-21-002424 (values in thousands): Alphabet, Amazon, Brookfield, HubSpot, Netflix, Salesforce, Slack, Spotify, Trupanion. https://www.sec.gov/Archives/edgar/data/1766504/000138713121002424/0001387131-21-002424.txt
+- Q4 2022, 0001420506-23-000511 ($210,125,539, 11 rows; whole dollars): Alphabet, Amazon, Brookfield Asset Mgmt Ltd (spin-off), Brookfield Corp, Burford, monday.com, Netflix, Salesforce, Shopify, Spotify, Trupanion (only 88,805 shares). No Berkshire, Markel or Microsoft. https://www.sec.gov/Archives/edgar/data/1766504/000142050623000511/0001420506-23-000511.txt
+- Q3 2023, 0001420506-23-002082 ($279,145,802, 9 rows): Alphabet 229,410; Amazon 548,165; Brookfield 1,560,009; Burford 984,468; Markel 32,425; Microsoft 89,640; monday.com 112,940; Shopify 262,880; Trupanion 301,470. No Berkshire (first appears Q4 2023). https://www.sec.gov/Archives/edgar/data/1766504/000142050623002082/0001420506-23-002082.txt
+
+## Other SEC filings (per the brief's addition)
+
+- **Schedule 13D / 13G:** none. The manager's archive folder lists only 13F-HR, 13F-HR/A and N-PX in the period. No holding approaches 5% of an issuer (largest by ownership is Trupanion, about 0.78M shares, under 2% of the company; peak 1.1M in Q2 2024, still well under 5%).
+- **Forms 3/4/5:** none; Greenlea is not a 10% holder of anything.
+- **Form N-PX (say-on-pay votes only, as required for 13F managers):**
+  - 0001420506-24-001302, filed 2024-08-08, year to 2024-06-30. https://www.sec.gov/Archives/edgar/data/1766504/000142050624001302/0001420506-24-001302.txt — aggregate (not split by account). Voted FOR every say-on-pay and for annual frequency: Microsoft (57,990 sh, meeting 2023-12-07), Markel 22,135, Amazon 483,850, Trupanion 425,070, Brookfield 1,547,135, Tesla 116,600 (meeting 2024-06-13, so Tesla was owned by the April 2024 record date).
+  - 0001420506-25-002492, filed 2025-08-27, year to 2025-06-30. https://www.sec.gov/Archives/edgar/data/1766504/000142050625002492/FormN-PX_ProxyVoteTable.xml — split by account for the first time: "GREENLEA LANE CAPITAL PARTNERS", "CASSINI PARTNERS, L.P. - GREENLEA", "GREENLEA LANE SMA 238 PLAN". Examples: Amazon 171,360 / 123,990 / 29,290 (sum 324,640 = Q1 2025 13F); Brookfield 511,105 / 368,270 / 88,050 (sum 967,425 = 13F); Trupanion 480,430 / 344,950 / 82,455 (sum 907,835 = 13F); Markel 11,830 / 8,595 / 2,030; Microsoft (2024-12-10 meeting) 21,985 / 14,015 / 3,350 (sum 39,350 = Q3 2024 13F); Burford (2025-05-14) Cassini 395,821 and SMA 126,395 only, no Partnership line (unexplained). All FOR.
+  - 0001420506-26-002116, filed 2026-08-31, year to 2026-06-30. https://www.sec.gov/Archives/edgar/data/1766504/000142050626002116/FormN-PX_ProxyVoteTable.xml — Tesla (2025-11-06) 41,180 / 30,800 / 7,355; Berkshire A (2026-05-02) 36 / 25 / 6, frequency vote "3 years" in line with the board; Markel (2026-05-20) 11,830 / 8,960 / 2,115; Amazon 163,005 / 123,990 / 29,290 (sum 316,285 = Q4 2025 13F, so the Q1 2026 trim came after the record date); Netflix (2026-06-04) 144,110 / 43,084 / 25,875 (sum 213,069, below the 279,480 on the Q1 2026 13F); Alphabet 51,095 / 39,495 / 9,445 (sum 100,035 = Q1 2026 13F); Trupanion 399,830 / 304,890 / 71,770 (sum 776,490). All FOR.
+  - Reading: he votes with management on pay everywhere, including Tesla in 2025. N-PX is the only public source that shows how holdings split across his three accounts.
+- **Form ADV:** Part 1A annual amendment dated 2026-03-31, read at https://reports.adviserinfo.sec.gov/reports/ADV/162012/PDF/162012.pdf (2026-11-19). Key data: RAUM $461,851,769, 3 accounts, all discretionary; 2 employees, both counted as performing investment advisory functions; Schedule A lists Josh David Tarasoff (Managing Member and CCO since 09/2006, 75%+ owner) and Panayiota Economou (Chief Operating Officer since 12/2024). Clients: 2 pooled vehicles $419,181,734 and one pension/profit-sharing plan $42,670,035 (custodian State Street per Rialytix). Private funds: Greenlea Lane Capital Partners, LP, gross assets $238,596,883, 73 beneficial owners, 17% owned by Tarasoff and related persons, 15% non-US persons; Cassini Partners, L.P. – Greenlea Lane Capital Management, LLC Series, gross assets $180,584,851, 2 beneficial owners, 2% related persons. Prime broker/custodian J.P. Morgan Securities; administrator HedgeServ.
+  - Part 2A brochure dated 2026-03-31: https://files.adviserinfo.sec.gov/IAPD/Content/Common/crd_iapd_Brochure.aspx?BRCHR_VRSN_ID=1034759 (read 2026-11-19). States the "Long-term Investment Strategy" (concentrated, undervalued companies expected to grow intrinsic value rapidly, high returns on capital, reinvestment opportunities, owner-minded management); performance allocation 10% or 15% over a 7% compounding hurdle with high-water mark; minimums $1M for Partnership and Cassini, $50M for SMAs; LPs get quarterly letters (not public). Only material change since the 2025-03-26 brochure: Item 5 fee arrangement.
+  - Prior-year ADV filings (March 2024, March 2025): could not reach them directly. Secondary: Insider Monkey says the March 2024 ADV reported $366,097,582 for 3 clients. 9AT shows +26% for AUM versus a prior filing and privatefunddata shows "down 4% vs Mar '25 Form ADV", which together hint the 2024-12-31 figure was roughly $480M; I treat this as unverified.
+- **Form D** (Greenlea Lane Capital Partners LP, CIK 0001413048, folder https://www.sec.gov/Archives/edgar/data/1413048/): D/A 0001632854-23-000002 (2023-06-30): total sold since 2007 $128,748,944, 96 investors. D/A 0001413048-24-000001 (2024-06-28): $131,487,120, 106 investors. D/A 0001413048-25-000002 (2025-06-27): $134,743,448, 106 investors. So gross new subscriptions into the Partnership were about $2.7M (2023-24) and $3.3M (2024-25): no inflow wave. No 2026 Form D amendment appears in the folder as of 2026-11-19 (annual amendments were filed each June/July 2012-2025). No Form D found for the Cassini series (it would be filed by the Cassini platform, not Greenlea; not searched further).
+- **N-CSR / N-PORT:** not applicable (no registered funds).
+
+## Manager's own words (read 2026-11-19, oldest first by date written)
+
+- 2012-06 VALUEx Vail deck, "Investment Idea: Amazon.com" (copies): http://investingsidekick.com/wp-content/uploads/2014/02/amzn-valuexvail-2012-josh-tarasoff1.pdf and https://forum.valuepickr.com/uploads/default/original/2X/0/02e520bb7e658f26f1027e9799d2d23938ca31ff.pdf (search highlights only).
+- 2017-01-25 Ben Graham Centre interview, transcript excerpt: https://hedgefundalpha.com/strategies/ben-graham-centre-interview-with-josh-tarasoff/ (read in full; the Ivey page https://www.ivey.uwo.ca/bengrahaminvesting/resources/interviews-notes/josh-tarasoff/ says the video is not available).
+- 2019-04-10 Ivey conference slides "Lessons from my first dozen years": https://www.ivey.uwo.ca/media/3785963/2019-conference_tarasoff.pdf
+- 2021-07 MITIMCo interview by Joel Cohen: https://img1.wsimg.com/blobby/go/9ddca17c-1340-4ee8-8d30-072426ccf011/MITIMCo%20Interview%20with%20Josh%20Tarasoff%20-%20Ju-0003.pdf and https://joelmcohen.medium.com/greenlea-lane-founder-josh-tarasoff-interviewed-by-mit-investment-management-company-53e5e3fdc910
+- 2021-07 "Essay about investing" (self-driving, feedback loops, quality, endgame): https://www.greenlealane.com/_files/ugd/25304a_e5930ca14e414cf59cabb0a32596c686.pdf
+- 2023-10 "Essay about impact and duration" (file name dated 03-13-24; text dated October 2023): https://www.greenlealane.com/_files/ugd/25304a_ed9e5e7f4c394cd8b3928672a780ec87.pdf — not linked from the current public page but still served.
+- 2024-03 "Conviction and Quality": https://www.greenlealane.com/_files/ugd/25304a_8972cbb8d2034886b980ec0ca6f4b17d.pdf
+- 2024-07 "Direct and indirect" (current file name dated 08-22-26): https://www.greenlealane.com/_files/ugd/25304a_248963ed1a394d69be38b02d1fc7b8e1.pdf
+- 2026-02 "Implicit and explicit": https://www.greenlealane.com/_files/ugd/25304a_5b374d9b10774e2fba580207caf9c4fb.pdf
+- Public materials page listing the four current essays: https://www.greenlealane.com/public
+
+## Secondary sources read
+
+- Excelsior Capital Substack, notes from a Tarasoff talk at Columbia's CSIMA, 2024-07-26: https://excelsiorcapital.substack.com/p/antifragile-investing-josh-tarasoffs (student's paraphrase, not a transcript).
+- Alpha-File, "Greenlea Lane: The Anti-Firm", 2026-07-24: https://alpha-file.com/blog/greenlea-lane-the-anti-firm — useful for 2017 interview quotes I could not verify against a transcript (notably "I would buy it and then later I thought I was really just compromising there and I would sell it"). Its holdings figures are wrong in places: it says Netflix was "held the full window" and gives Q1 2026 weights (Amazon 25.4%, SGOV 15.1%) that do not match the Q1 2026 13F (Amazon 18.9%, SGOV 11.2%; Netflix absent from Q4 2023 to Q4 2025). Do not rely on its numbers.
+- Guru Gems, "The Philosopher-Investor", 2026-04-19: https://www.gurugems.org/p/tarasoff — summary only; confirms no recent letters circulate.
+- Jong Beleggen podcast #222 notes (Dutch): https://jongbeleggendepodcast.nl/222-pricing-power — says his talks have mostly been taken offline; cites a pricing-power talk.
+- UVA McIntire CIFM talk listing, 2025-01-23: https://events.mcintire.virginia.edu/event/cifm-professional-speaker-series (event notice only; co-sponsored by the Gayner Family Sustainable Investment Fund club).
+- One Investment Away podcast ep. 5 (2023-11-15) on his Spotify thesis: https://podcasts.apple.com/nl/podcast/ep-05-value-hacking-101-why-did-josh-tarasoff-of/id1713595544?i=1000634623738 (description only; third-party).
+- ADV aggregators: 9AT https://www.9at.com/Adviser/801-113615 ; Rialytix https://www.rialytix.com/crd/162012/greenlea-lane-capital-management-llc ; privatefunddata https://privatefunddata.com/fund-companies/greenlea-lane-capital-management-llc/ ; Insider Monkey https://www.insidermonkey.com/hedge-fund/greenlea+lane+capital/1081/ (highlight only).
+- Event facts checked: Brookfield 3-for-2 split, https://bn.brookfield.com/sites/brookfield-bn-v2/files/BN-IR-Master/Brookfield-Security-History/brookfield-security-history-2025.pdf ; Netflix 10-for-1 split, https://ir.netflix.net/investor-news-and-events/financial-releases/press-release-details/2025/Netflix-Announces-Ten-For-One-Stock-Split/ ; Burford/YPF Second Circuit reversal 2026-03-27 (stock fell about 40% that day), https://investors.burfordcapital.com/news/news-details/2026/Burford-Capital-Statement-Re-YPF-Appeal-Decision/default.aspx , https://www.benzinga.com/trading-ideas/movers/26/03/51516287/burford-capital-stock-slides-after-court-ruling-strikes-16-1b , https://www.reuters.com/legal/government/ypf-investors-ask-us-supreme-court-revive-161-billion-judgment-against-argentina-2026-10-01/ ; Markel leadership change 2026-09-08 and Q3 2026 results, https://ir.mklgroup.com/investor-relations/news/news-details/2026/Markel-Chairman-Steve-Markel-to-Retire-and-Will-Be-Succeeded-by-Tom-Gayner/default.aspx , https://www.investing.com/news/transcripts/earnings-call-transcript-markel-group-posts-q3-2026-earnings-miss-shares-rise-93CH-4984614
+
+## Problems and gaps
+
+- No partnership letters from 2023-2026 are public. The ADV says LPs get quarterly letters; none circulate. Searched Exa for letters, podcasts and talks; found the four essays plus older interviews. Alpha-File and Guru Gems also say nothing recent circulates.
+- Hedge Fund Alpha's write-up of his July 2024 Trani (Italy) value investing seminar panel is behind a sign-up wall (https://hedgefundalpha.com/conferences/value-investing-seminar-josh-tarasoff/); not opened. Its title says he pitched the pet-insurance stock (Trupanion).
+- "Invest Like the Best" episode "Defining Quality" is mentioned by an aggregator (valueinvest.fund); not searched for a transcript due to time; it predates the period.
+- greenlealane.com pages other than /public returned "not found" through Exa; the essays are PDFs on the site's file host.
+- Could not open the March 2024 and March 2025 ADV filings directly (IAPD serves only the latest Part 1); prior AUM figures are secondary.
+- No source from the manager explains any specific trade in the period, the T-bill ETF, or the Burford, Netflix, Microsoft, monday.com or Shopify exits.
+- Exa worked throughout; no blocked pages other than the sign-up wall above.
+
+
+## 2026-11-19: holdings rebuilt from SEC filings
+
+The holdings CSVs were regenerated by `scripts/build13f.py` from the information-table XML fetched directly from sec.gov, and compared row by row (CUSIP plus put/call) with the hand-built CSVs. Shares and values were identical in every quarter, so no transcription error was found. Differences are cosmetic: issuer and class text is now as filed rather than normalised by hand, and `pct_of_portfolio` has four decimals. Each holdings folder now has `sources.csv`, listing the accessions behind each quarter and how amendments were applied. Filer errors that were never amended are fixed in `managers.yaml` (`corrections`, `accepted_gaps`) rather than by hand.
